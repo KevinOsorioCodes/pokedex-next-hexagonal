@@ -8,6 +8,7 @@ const jestConfig = {
     '!<rootDir>/src/domain/usecases/*.ts',
     '!<rootDir>/src/application/protocols/services/*.ts',
     '!<rootDir>/src/**/*.entity.ts',
+    '!<rootDir>/src/**/*.dto.ts',
     '!<rootDir>/src/**/_app.tsx',
   ],
   clearMocks: true,

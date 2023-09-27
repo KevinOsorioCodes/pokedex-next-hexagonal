@@ -25,3 +25,27 @@ body {
   Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   min-height: 100dvh;
 }
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #9E9E9E;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #F44336;
+  border-radius: 20px;
+
+}
+
+::-webkit-scrollbar-track:hover {
+  background-color: #CFCFCF;
+
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #D32F2F;
+}

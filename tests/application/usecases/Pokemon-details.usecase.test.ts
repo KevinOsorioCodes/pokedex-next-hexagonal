@@ -1,36 +1,83 @@
 import { PokemonDetailsUsecase } from '~/application/usecases'
 import { IPokemonDetailsStorage } from '~/application/protocols/services'
-import { left, right } from 'src/shared/either'
+import { left, right } from '~/shared/either'
+import {
+  AbilityDTO,
+  PokemonDetailsDTODto,
+  SpritesDTO,
+  TypeDTO,
+} from '~/infrastructure/services/dtos/PokemonDetailsDTO.dto'
 
 describe('PokemonDetailsUsecase', () => {
+  const pokemonData: PokemonDetailsDTODto = {
+    name: 'Pikachu',
+    types: [] as TypeDTO[],
+    abilities: [] as AbilityDTO[],
+    sprites: {} as SpritesDTO,
+    id: 1,
+  }
   // Tests that the get method returns the correct PokemonDetails when given a valid name
   it('should return the correct PokemonDetails when given a valid name', async () => {
     // Arrange
     const name = 'Pikachu'
-    const pokemonDetails = { name: 'Pikachu', type: 'Electric' }
     const pokemonDetailsStorageMock: IPokemonDetailsStorage = {
-      findOne: jest.fn().mockResolvedValue(right(pokemonDetails)),
+      findOne: jest.fn().mockResolvedValue(right(pokemonData)),
+      save: jest.fn(),
     }
-    const usecase = new PokemonDetailsUsecase(pokemonDetailsStorageMock)
-
+    const localPokemonDetailsStorageMock: IPokemonDetailsStorage = {
+      findOne: jest.fn().mockResolvedValue(right(pokemonData)),
+      save: jest.fn().mockResolvedValue(pokemonData),
+    }
+    const usecase = new PokemonDetailsUsecase(
+      pokemonDetailsStorageMock,
+      localPokemonDetailsStorageMock
+    )
     // Act
     const result = await usecase.getPokemon(name)
 
     // Assert
     expect(result.isRight()).toBe(true)
-    expect(result.value).toEqual(pokemonDetails)
+    expect(result.value).toEqual(pokemonData)
+  })
+  // Tests that the save method returns the correct PokemonDetails when given a valid data
+  it('should return the correct PokemonDetails when given a valid pokemon data', async () => {
+    // Arrange
+    const pokemonDetailsStorageMock: IPokemonDetailsStorage = {
+      findOne: jest.fn(),
+      save: jest.fn().mockResolvedValue(pokemonData),
+    }
+    const localPokemonDetailsStorageMock: IPokemonDetailsStorage = {
+      findOne: jest.fn(),
+      save: jest.fn().mockResolvedValue(pokemonData),
+    }
+    const usecase = new PokemonDetailsUsecase(
+      pokemonDetailsStorageMock,
+      localPokemonDetailsStorageMock
+    )
+
+    // Act
+    const result = await usecase.savePokemon(pokemonData)
+
+    // Assert
+    expect(result).toEqual(pokemonData)
   })
 
   // Tests that the get method returns a Right Either object when given a valid name
   it('should return a Right Either object when given a valid name', async () => {
     // Arrange
     const name = 'Pikachu'
-    const pokemonDetails = { name: 'Pikachu', type: 'Electric' }
     const pokemonDetailsStorageMock: IPokemonDetailsStorage = {
-      findOne: jest.fn().mockResolvedValue(right(pokemonDetails)),
+      findOne: jest.fn().mockResolvedValue(right(pokemonData)),
+      save: jest.fn(),
     }
-    const usecase = new PokemonDetailsUsecase(pokemonDetailsStorageMock)
-
+    const localPokemonDetailsStorageMock: IPokemonDetailsStorage = {
+      findOne: jest.fn().mockResolvedValue(right(pokemonData)),
+      save: jest.fn().mockResolvedValue(pokemonData),
+    }
+    const usecase = new PokemonDetailsUsecase(
+      pokemonDetailsStorageMock,
+      localPokemonDetailsStorageMock
+    )
     // Act
     const result = await usecase.getPokemon(name)
 
@@ -43,15 +90,22 @@ describe('PokemonDetailsUsecase', () => {
     // Arrange
     const name = 'Pikachu'
     const pokemonDetailsStorageMock: IPokemonDetailsStorage = {
-      findOne: jest.fn().mockResolvedValue(right({})),
+      findOne: jest.fn().mockResolvedValue(right(pokemonData)),
+      save: jest.fn(),
     }
-    const usecase = new PokemonDetailsUsecase(pokemonDetailsStorageMock)
-
+    const localPokemonDetailsStorageMock: IPokemonDetailsStorage = {
+      findOne: jest.fn().mockResolvedValue(right(pokemonData)),
+      save: jest.fn().mockResolvedValue(pokemonData),
+    }
+    const usecase = new PokemonDetailsUsecase(
+      pokemonDetailsStorageMock,
+      localPokemonDetailsStorageMock
+    )
     // Act
     await usecase.getPokemon(name)
 
     // Assert
-    expect(pokemonDetailsStorageMock.findOne).toHaveBeenCalledWith(name)
+    expect(localPokemonDetailsStorageMock.findOne).toHaveBeenCalledWith(name)
   })
 
   // Tests that the get method returns a Left Either object when IPokemonDetailsStorage returns an error
@@ -61,9 +115,16 @@ describe('PokemonDetailsUsecase', () => {
     const error = new Error('Error Fetching data')
     const pokemonDetailsStorageMock: IPokemonDetailsStorage = {
       findOne: jest.fn().mockResolvedValue(left(error)),
+      save: jest.fn(),
     }
-    const usecase = new PokemonDetailsUsecase(pokemonDetailsStorageMock)
-
+    const localPokemonDetailsStorageMock: IPokemonDetailsStorage = {
+      findOne: jest.fn().mockResolvedValue(left(error)),
+      save: jest.fn().mockResolvedValue(pokemonData),
+    }
+    const usecase = new PokemonDetailsUsecase(
+      pokemonDetailsStorageMock,
+      localPokemonDetailsStorageMock
+    )
     // Act
     const result = await usecase.getPokemon(name)
 
@@ -78,9 +139,16 @@ describe('PokemonDetailsUsecase', () => {
     const error = new Error('Error Fetching data')
     const pokemonDetailsStorageMock: IPokemonDetailsStorage = {
       findOne: jest.fn().mockResolvedValue(left(error)),
+      save: jest.fn(),
     }
-    const usecase = new PokemonDetailsUsecase(pokemonDetailsStorageMock)
-
+    const localPokemonDetailsStorageMock: IPokemonDetailsStorage = {
+      findOne: jest.fn().mockResolvedValue(left(error)),
+      save: jest.fn().mockResolvedValue(pokemonData),
+    }
+    const usecase = new PokemonDetailsUsecase(
+      pokemonDetailsStorageMock,
+      localPokemonDetailsStorageMock
+    )
     // Act
     const result = await usecase.getPokemon(name)
 
@@ -96,9 +164,18 @@ describe('PokemonDetailsUsecase', () => {
       findOne: jest
         .fn()
         .mockResolvedValue(left(new Error('Pokemon not found'))),
+      save: jest.fn(),
     }
-    const usecase = new PokemonDetailsUsecase(pokemonDetailsStorageMock)
-
+    const localPokemonDetailsStorageMock: IPokemonDetailsStorage = {
+      findOne: jest
+        .fn()
+        .mockResolvedValue(left(new Error('Pokemon not found'))),
+      save: jest.fn().mockResolvedValue(pokemonData),
+    }
+    const usecase = new PokemonDetailsUsecase(
+      pokemonDetailsStorageMock,
+      localPokemonDetailsStorageMock
+    )
     // Act
     const result = await usecase.getPokemon(name)
 

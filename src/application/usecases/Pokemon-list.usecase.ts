@@ -1,6 +1,6 @@
 import { IPokemonListUseCase } from '~/domain/usecases/pokemon-list.usecase'
 import { IPokemonListStorage } from '~/application/protocols/services'
-import { left, right } from 'src/shared/either'
+import { left, right } from '~/shared/either'
 
 export class PokemonListUsecase implements IPokemonListUseCase {
   private readonly pokemonListStorage: IPokemonListStorage
@@ -10,8 +10,8 @@ export class PokemonListUsecase implements IPokemonListUseCase {
   }
 
   async getPaginatedPokemons(
-    limit = 10,
-    offset = 10
+    limit = 100,
+    offset = 0
   ): IPokemonListUseCase.output {
     const result = await this.pokemonListStorage.getPaginated(limit, offset)
     if (result.isLeft()) {

@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { pokemonDetailsFactory } from '~/infrastructure/factories/pokemonDetails/pokemonDetails.factory'
-import { PokemonDetailsDTO } from '~/infrastructure/services/pokeapi'
+import { PokemonDetailsDTODto } from '~/infrastructure/services/dtos/PokemonDetailsDTO.dto'
 
 export interface IUsePokemonDetails {
-  pokemon: PokemonDetailsDTO | null
+  pokemon: PokemonDetailsDTODto | null
   handleSelectPokemon: (pokemon: string) => void
 }
 
 export const usePokemon = (): IUsePokemonDetails => {
-  const [pokemon, setPokemon] = useState<PokemonDetailsDTO | null>(null)
+  const [pokemon, setPokemon] = useState<PokemonDetailsDTODto | null>(null)
   const pokemonDetailsUseCase = pokemonDetailsFactory()
   const handleSelectPokemon = async (pokemon: string) => {
     const result = await pokemonDetailsUseCase
@@ -19,7 +19,6 @@ export const usePokemon = (): IUsePokemonDetails => {
         }
         return res.value
       })
-    console.log(result)
     setPokemon(result)
   }
   return { pokemon, handleSelectPokemon }

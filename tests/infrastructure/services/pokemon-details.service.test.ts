@@ -1,8 +1,12 @@
-import { PokemonDetails, Sprites } from '~/domain/entities'
+import { AbilityDTO, PokemonDetails, Sprites, TypeDTO } from '~/domain/entities'
 import { PokemonDetailsService } from '~/infrastructure/services/pokeapi/pokemonDetails/pokemon-details.service'
-import { Left, Right, right } from 'src/shared/either'
+import { Left, Right, right } from '~/shared/either'
 import endpoints from '~/infrastructure/services/pokeapi/endpoints'
 import pokeapi from '~/infrastructure/services/pokeapi/pokeapi'
+import {
+  PokemonDetailsDTODto,
+  SpritesDTO,
+} from '~/infrastructure/services/dtos/PokemonDetailsDTO.dto'
 
 describe('PokemonDetailsService', () => {
   // Tests that findOne method returns a PokemonDetails object when a valid name is passed
@@ -16,6 +20,8 @@ describe('PokemonDetailsService', () => {
         front_default: 'validUrl',
         back_default: 'validUrl',
       } as Sprites,
+      abilities: [] as AbilityDTO[],
+      types: [] as TypeDTO[],
     }
     jest
       .spyOn(pokeapi, 'get')
@@ -42,6 +48,8 @@ describe('PokemonDetailsService', () => {
         front_default: 'validUrl',
         back_default: 'validUrl',
       } as Sprites,
+      abilities: [] as AbilityDTO[],
+      types: [] as TypeDTO[],
     }
     jest
       .spyOn(pokeapi, 'get')
@@ -97,5 +105,23 @@ describe('PokemonDetailsService', () => {
     expect(result).toBeInstanceOf(Left)
     expect(result.value).toEqual(expectedError)
     expect(pokeapi.get).toHaveBeenCalledWith(`${endpoints.pokemons}/${name}`)
+  })
+
+  //Test that save return same pokemon
+  it('should save return the same pokemon', async () => {
+    // Arrange
+    const pokemon: PokemonDetailsDTODto = {
+      name: 'pokemon',
+      abilities: [],
+      types: [],
+      sprites: {} as SpritesDTO,
+      id: 0,
+    }
+    const pokemonService = new PokemonDetailsService()
+    // Act
+    const savedPokemon = await pokemonService.save(pokemon)
+
+    // Assert
+    expect(savedPokemon).toEqual(pokemon)
   })
 })

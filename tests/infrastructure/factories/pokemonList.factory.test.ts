@@ -1,5 +1,5 @@
 import { PokemonListUsecase } from '~/application/usecases/Pokemon-list.usecase'
-import { left, right } from 'src/shared/either'
+import { left, right } from '~/shared/either'
 import { PokemonListFactory } from '~/infrastructure/factories/pokemonList/pokemonList.factory'
 
 describe('PokemonListFactory', () => {

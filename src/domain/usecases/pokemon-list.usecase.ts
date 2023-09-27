@@ -1,4 +1,4 @@
-import { Either } from 'src/shared/either'
+import { Either } from '~/shared/either'
 import { Pokemon } from '~/domain/entities'
 
 export interface IPokemonListUseCase {

@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { labels } from '~/shared/labels'
 import { usePokemonDetailsContext } from '~/infrastructure/react/hooks/usePokemonDetailsContext'
-import { PokemonDTO } from '~/infrastructure/services/pokeapi/entities/PokemonPaginated.entity'
+import { PokemonDTO } from '~/infrastructure/services/dtos/PokemonPaginated.dto'
 
 interface IPokemonListProps {
   pokemons?: PokemonDTO[]
@@ -10,7 +10,11 @@ interface IPokemonListProps {
 const PokemonList: FC<IPokemonListProps> = ({ pokemons }) => {
   const { handleSelectPokemon } = usePokemonDetailsContext()
   return (
-    <section className={'flex flex-col w-1/4 items-center gap-2'}>
+    <section
+      className={
+        'flex flex-col w-1/4 items-center gap-2 h-5/6 overflow-y-scroll '
+      }
+    >
       <h5 className={'font-bold text-xl'}>{labels.POKEDEX}</h5>
       {!pokemons && <div>loading...</div>}
       {pokemons && (

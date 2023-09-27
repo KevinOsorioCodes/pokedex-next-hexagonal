@@ -1,10 +1,10 @@
-import { Either } from 'src/shared/either'
-import { Pokemon } from '~/domain/entities'
+import { Either } from '~/shared/either'
+import { PokemonDTO } from '~/infrastructure/services/dtos/PokemonPaginated.dto'
 
 export interface IPokemonListStorage {
   getPaginated: (limit?: number, offset?: number) => IPokemonListStorage.output
 }
 
 export namespace IPokemonListStorage {
-  export type output = Promise<Either<Error, Pokemon[]>>
+  export type output = Promise<Either<Error, PokemonDTO[]>>
 }

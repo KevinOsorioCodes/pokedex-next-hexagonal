@@ -1,11 +1,15 @@
 import { IPokemonListStorage } from '~/application/protocols/services'
 import pokeapi from '~/infrastructure/services/pokeapi/pokeapi'
 import endpoints from '~/infrastructure/services/pokeapi/endpoints'
-import { IPokemonPaginated } from '~/infrastructure/services/pokeapi/entities/PokemonPaginated.entity'
-import { left, right } from 'src/shared/either'
+import {
+  IPokemonPaginated,
+  PokemonDTO,
+} from '~/infrastructure/services/dtos/PokemonPaginated.dto'
+import { Either, left, right } from '~/shared/either'
+import { AxiosError } from 'axios'
 
 export class PokemonListService implements IPokemonListStorage {
-  async getPaginated(limit = 40, offset = 0): IPokemonListStorage.output {
+  async getPaginated(limit = 100, offset = 0): IPokemonListStorage.output {
     if (limit < 0) {
       return left(new Error(`Invalid limit parameter: ${limit}`))
     }
@@ -16,12 +20,15 @@ export class PokemonListService implements IPokemonListStorage {
       .get<IPokemonPaginated>(endpoints.pokemons, {
         params: { limit, offset },
       })
-      .then((response) => {
+      .then((response): Either<Error, PokemonDTO[]> => {
         const pokemons = response.data.results.map((pokemon) => ({
           name: pokemon.name,
           url: pokemon.url,
         }))
         return right(pokemons)
+      })
+      .catch((e: AxiosError) => {
+        return left(new Error(`API failed with status: ${e?.response?.status}`))
       })
   }
 }

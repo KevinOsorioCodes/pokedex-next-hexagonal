@@ -1,7 +1,7 @@
 import { PokemonDetailsUsecase } from '~/application/usecases'
 import { left, right } from '~/shared/either'
-import { pokemonDetailsFactory } from '~/infrastructure/factories/pokemonDetails/pokemonDetails.factory'
 import { AbilityDTO, PokemonDetails, Sprites, TypeDTO } from '~/domain/entities'
+import { LocalPokemonDetailsFactory } from '~/infrastructure/factories/pokemonDetails/localPokemonDetails.factory'
 
 describe('PokemonDetailsFactory', () => {
   afterEach(() => {
@@ -12,14 +12,14 @@ describe('PokemonDetailsFactory', () => {
     // Arrange
     const pokemonDetailsStorageMock = jest.fn()
     jest.mock(
-      '~/infrastructure/services/pokeapi/pokemonDetails/pokemon-details.service.ts',
+      '~/infrastructure/services/localApi/pokemonDetails/pokemon-details.service.ts',
       () => ({
         PokemonDetailsService: pokemonDetailsStorageMock,
       })
     )
 
     // Act
-    const result = pokemonDetailsFactory()
+    const result = LocalPokemonDetailsFactory()
 
     // Assert
     expect(result).toBeInstanceOf(PokemonDetailsUsecase)
@@ -30,14 +30,14 @@ describe('PokemonDetailsFactory', () => {
     // Arrange
     const pokemonDetailsStorageMock = jest.fn()
     jest.mock(
-      '~/infrastructure/services/pokeapi/pokemonDetails/pokemon-details.service.ts',
+      '~/infrastructure/services/localApi/pokemonDetails/pokemon-details.service.ts',
       () => ({
         PokemonDetailsService: pokemonDetailsStorageMock,
       })
     )
 
     // Act
-    const result = pokemonDetailsFactory()
+    const result = LocalPokemonDetailsFactory()
 
     // Assert
     expect(result.getPokemon).toBeDefined()
@@ -91,7 +91,6 @@ describe('PokemonDetailsFactory', () => {
       pokemonDetailsStorageMock,
       localPokemonDetailsStorageMock
     )
-
     // Act
     const result = await pokemonListUseCase.getPokemon('pokemon')
 

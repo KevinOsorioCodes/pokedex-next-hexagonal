@@ -18,7 +18,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <title>{labels.APP_NAME}</title>
       </Head>
       <PokemonProvider>
-        <div className={`flex flex-col w-screen ${inter.className}`}>
+        <div className={`flex flex-col w-screen h-screen ${inter.className}`}>
           <PokedexHeader />
           <Component {...pageProps} />
         </div>

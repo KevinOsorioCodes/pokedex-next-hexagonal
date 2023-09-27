@@ -1,4 +1,4 @@
-export interface Sprites {
+export interface SpritesDTO {
   back_default: string
   back_female: string
   back_shiny: string
@@ -9,12 +9,7 @@ export interface Sprites {
   front_shiny_female: string
 }
 
-export interface Ability {
-  name: string
-  url: string
-}
-
-export interface Type {
+export interface AbilityDetailsDTO {
   name: string
   url: string
 }
@@ -22,18 +17,23 @@ export interface Type {
 export interface AbilityDTO {
   is_hidden: boolean
   slot: number
-  ability: Ability
+  ability: AbilityDetailsDTO
+}
+
+export interface TypeDetailsDTO {
+  name: string
+  url: string
 }
 
 export interface TypeDTO {
   slot: number
-  type: Type
+  type: TypeDetailsDTO
 }
 
-export interface PokemonDetails {
+export interface PokemonDetailsDTODto {
   id: number
   name: string
-  sprites: Sprites
+  sprites: SpritesDTO
   abilities: AbilityDTO[]
   types: TypeDTO[]
 }

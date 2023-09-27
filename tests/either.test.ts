@@ -1,4 +1,4 @@
-import { Left, Right } from 'src/shared/either'
+import { Left, Right } from '~/shared/either'
 
 describe('Left', () => {
   it('should create a new instance of Left with a value and correctly assign the value', () => {

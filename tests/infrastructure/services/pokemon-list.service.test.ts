@@ -1,5 +1,5 @@
 import { PokemonListService } from '~/infrastructure/services/pokeapi/pokemonList/pokemon-list.service'
-import { left, right } from 'src/shared/either'
+import { left, right } from '~/shared/either'
 import pokeapi, {
   validateStatus,
 } from '~/infrastructure/services/pokeapi/pokeapi'
@@ -142,7 +142,7 @@ describe('PokemonListService', () => {
     // Arrange
     const limit = 40
     const offset = 0
-    const expectedError = new Error('Api failed with status: 500')
+    const expectedError = new Error('API failed with status: 500')
     jest
       .spyOn(pokeapi, 'get')
       .mockRejectedValueOnce({ response: { status: 500 } })

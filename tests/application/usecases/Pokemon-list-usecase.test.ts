@@ -1,5 +1,5 @@
 import { IPokemonListStorage } from '~/application/protocols/services'
-import { left, right } from 'src/shared/either'
+import { left, right } from '~/shared/either'
 import { PokemonListUsecase } from '~/application/usecases/Pokemon-list.usecase'
 import { Pokemon } from '~/domain/entities'
 
