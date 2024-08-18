@@ -26,7 +26,16 @@ export class PokemonDetailsService implements IPokemonDetailsStorage {
 
   async save(pokemon: PokemonDetailsDTODto) {
     const pokemons = await this.getPokemons()
-    const newPokemon = { [pokemon.name]: pokemon }
+    const newPokemon = {
+      [pokemon.name]: {
+        id: pokemon.id,
+        name: pokemon.name,
+        sprites: pokemon.sprites,
+        abilities: pokemon.abilities,
+        types: pokemon.types,
+        stats: pokemon.stats,
+      },
+    }
     if (pokemons.isLeft()) {
       localStorage.setItem('pokemons', JSON.stringify({ ...newPokemon }))
     }
