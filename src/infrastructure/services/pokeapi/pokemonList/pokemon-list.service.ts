@@ -9,7 +9,7 @@ import { Either, left, right } from '~/shared/either'
 import { AxiosError } from 'axios'
 
 export class PokemonListService implements IPokemonListStorage {
-  async getPaginated(limit = 100, offset = 0): IPokemonListStorage.output {
+  async getPokemons(limit = 100, offset = 0): IPokemonListStorage.output {
     if (limit < 0) {
       return left(new Error(`Invalid limit parameter: ${limit}`))
     }

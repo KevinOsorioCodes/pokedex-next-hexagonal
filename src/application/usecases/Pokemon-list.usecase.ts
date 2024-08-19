@@ -1,6 +1,5 @@
 import { IPokemonListUseCase } from '~/domain/usecases/pokemon-list.usecase'
 import { IPokemonListStorage } from '~/application/protocols/services'
-import { left, right } from '~/shared/either'
 
 export class PokemonListUsecase implements IPokemonListUseCase {
   private readonly pokemonListStorage: IPokemonListStorage
@@ -9,15 +8,11 @@ export class PokemonListUsecase implements IPokemonListUseCase {
     this.pokemonListStorage = pokemonListStorage
   }
 
-  async getPaginatedPokemons(
-    limit = 100,
-    offset = 0
-  ): IPokemonListUseCase.output {
-    const result = await this.pokemonListStorage.getPaginated(limit, offset)
+  async getPokemonList(limit = 1038, offset = 0): IPokemonListUseCase.output {
+    const result = await this.pokemonListStorage.getPokemons(limit, offset)
     if (result.isLeft()) {
-      return left(new Error('Data Fetching failed!! Try refreshing the page.'))
+      throw new Error('Error Fetching data')
     }
-
-    return right(result.value)
+    return result.value
   }
 }

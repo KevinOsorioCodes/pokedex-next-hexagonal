@@ -1,19 +1,22 @@
-import { createContext, FC, ReactNode } from 'react'
+import { createContext, Dispatch, FC, ReactNode, useReducer } from 'react'
 import {
-  IUsePokemonDetails,
-  usePokemon,
-} from '~/infrastructure/react/hooks/usePokemon'
+  initialPokedex,
+  PokedexAction,
+  pokedexReducer,
+  PokedexState,
+} from '~/infrastructure/react/reducers/pokedex.reducer'
 
-export const PokemonContext = createContext<IUsePokemonDetails>({
-  pokemon: null,
-  handleSelectPokemon: () => null,
-})
-
+export const PokedexStateContext = createContext<PokedexState>(initialPokedex)
+export const PokedexDispatchContext = createContext<Dispatch<PokedexAction>>(
+  () => null
+)
 export const PokemonProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const { pokemon, handleSelectPokemon } = usePokemon()
+  const [pokedexState, dispatch] = useReducer(pokedexReducer, initialPokedex)
   return (
-    <PokemonContext.Provider value={{ pokemon, handleSelectPokemon }}>
-      {children}
-    </PokemonContext.Provider>
+    <PokedexStateContext.Provider value={pokedexState}>
+      <PokedexDispatchContext.Provider value={dispatch}>
+        {children}
+      </PokedexDispatchContext.Provider>
+    </PokedexStateContext.Provider>
   )
 }
