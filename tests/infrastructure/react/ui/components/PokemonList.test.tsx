@@ -1,28 +1,38 @@
-import { render, screen } from '@testing-library/react'
-import { labels } from '~/shared/labels/labels'
-import { Pokemon } from '~/domain/entities/Pokemon.entity'
+import { render } from '@testing-library/react'
 import PokemonList from '~/infrastructure/react/ui/components/PokemonList'
+import {
+  PokedexDispatchContext,
+  PokedexStateContext,
+} from '~/infrastructure/react/context/PokemonContext'
+import { pokedexStateMock } from '~/tests/__mocks__/pokedexState.mock'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 describe('Index Test Suite', () => {
-  it('should return a section element with the text "PokemonListEntity"', () => {
-    render(<PokemonList />)
-    const sectionElement = screen.getByText(labels.POKEDEX)
-    expect(sectionElement).toBeInTheDocument()
+  it('should return a section element ', () => {
+    const { getByTestId } = render(<PokemonList />)
+    const pokemonList = getByTestId('pokemon-list')
+    const searchBar = getByTestId('search-bar')
+    expect(pokemonList).toBeInTheDocument()
+    expect(searchBar).toBeInTheDocument()
   })
+
   it('should return a list of pokemons when given a array of pokemons', () => {
-    const pokemons: Pokemon[] = [
-      { url: 'url1', name: 'pokemon1' },
-      { url: 'url2', name: 'pokemon2' },
-    ]
-    render(<PokemonList pokemons={pokemons} />)
-    const pokemon1 = screen.getByText('pokemon1')
-    const pokemon2 = screen.getByText('pokemon1')
-    expect(pokemon1).toBeInTheDocument()
-    expect(pokemon2).toBeInTheDocument()
-  })
-  it('should show loading when not given an pokemon array', () => {
-    render(<PokemonList />)
-    const pokemon1 = screen.getByText('loading...')
-    expect(pokemon1).toBeInTheDocument()
+    const queryClientMock = new QueryClient()
+    const mockDispatch = jest.fn()
+    const { getByTestId } = render(<PokemonList />, {
+      wrapper: ({ children }) => (
+        <QueryClientProvider client={queryClientMock}>
+          <PokedexStateContext.Provider value={pokedexStateMock}>
+            <PokedexDispatchContext.Provider value={mockDispatch}>
+              {children}
+            </PokedexDispatchContext.Provider>
+          </PokedexStateContext.Provider>
+        </QueryClientProvider>
+      ),
+    })
+    const bulbasaur = getByTestId('title-bulbasaur')
+    const charmander = getByTestId('title-charmander')
+    expect(bulbasaur).toBeInTheDocument()
+    expect(charmander).toBeInTheDocument()
   })
 })

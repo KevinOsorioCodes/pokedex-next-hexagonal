@@ -1,9 +1,9 @@
 import {
-  PokemonContext,
+  PokedexStateContext,
   PokemonProvider,
 } from '~/infrastructure/react/context/PokemonContext'
-import { fireEvent, render } from '@testing-library/react'
-import { PokemonDetails, Sprites } from '~/domain/entities'
+import { render } from '@testing-library/react'
+import { pokedexStateMock } from '~/tests/__mocks__/pokedexState.mock'
 
 describe('PokemonProvider', () => {
   // Tests that PokemonProvider renders the children components
@@ -25,50 +25,17 @@ describe('PokemonProvider', () => {
     expect(childComponent2).toBeInTheDocument()
   })
 
-  // Tests that PokemonProvider provides PokemonContext with the correct values for pokemon and handleSelectPokemon
-  it('should provide correct values to PokemonContext', () => {
-    // Arrange
-    const pokemon: PokemonDetails = {
-      name: 'Pikachu',
-      id: 1,
-      sprites: {} as Sprites,
-    }
-    const handleSelectPokemon = jest.fn()
-    const { getByText } = render(
-      <PokemonContext.Provider value={{ pokemon, handleSelectPokemon }}>
-        <PokemonContext.Consumer>
-          {(value) => (
-            <div>
-              <h2>{value.pokemon?.name}</h2>
-              <button onClick={() => value.handleSelectPokemon('Pikachu')}>
-                Select
-              </button>
-            </div>
-          )}
-        </PokemonContext.Consumer>
-      </PokemonContext.Provider>
-    )
-
-    // Act
-    const pokemonName = getByText('Pikachu')
-    fireEvent.click(getByText('Select'))
-
-    // Assert
-    expect(pokemonName).toBeInTheDocument()
-    expect(handleSelectPokemon).toHaveBeenCalledTimes(1)
-  })
-
   // Tests that PokemonProvider handles the case when usePokemonDetails returns null for pokemon
   it('should handle null pokemon', () => {
     // Arrange
     const { getByText } = render(
-      <PokemonProvider>
-        <PokemonContext.Consumer>
+      <PokedexStateContext.Provider value={pokedexStateMock}>
+        <PokedexStateContext.Consumer>
           {(value) => (
-            <div>{!value.pokemon?.name && <span>...loading</span>}</div>
+            <div>{!value.pokedex['Onix']?.name && <span>...loading</span>}</div>
           )}
-        </PokemonContext.Consumer>
-      </PokemonProvider>
+        </PokedexStateContext.Consumer>
+      </PokedexStateContext.Provider>
     )
 
     // Act
@@ -76,30 +43,6 @@ describe('PokemonProvider', () => {
 
     // Assert
     expect(pokemonName).toBeInTheDocument()
-  })
-
-  // Tests that PokemonProvider handles the case when usePokemonDetails returns null for handleSelectPokemon
-  it('should handle null handleSelectPokemon', () => {
-    // Arrange
-    const { getByText } = render(
-      <PokemonProvider>
-        <PokemonContext.Consumer>
-          {(value) => (
-            <div>
-              <button onClick={() => value.handleSelectPokemon('')}>
-                Select
-              </button>
-            </div>
-          )}
-        </PokemonContext.Consumer>
-      </PokemonProvider>
-    )
-
-    // Act
-    fireEvent.click(getByText('Select'))
-
-    // Assert
-    // No assertion needed, just make sure the click event does not throw an error
   })
 
   // Tests that PokemonProvider renders without any children components

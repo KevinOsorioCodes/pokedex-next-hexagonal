@@ -27,7 +27,7 @@ describe('PokemonListService', () => {
     //Assert
     expect(result).toBe(expected)
   })
-  // Tests that the getPaginated method returns a list of Pokemon when called with valid limit and offset parameters
+  // Tests that the getPokemons method returns a list of Pokemon when called with valid limit and offset parameters
   it('should return a list of Pokemon when called with valid limit and offset parameters', async () => {
     // Arrange
     const limit = 10
@@ -44,7 +44,7 @@ describe('PokemonListService', () => {
     const pokemonListService = new PokemonListService()
 
     // Act
-    const result = await pokemonListService.getPaginated(limit, offset)
+    const result = await pokemonListService.getPokemons(limit, offset)
 
     // Assert
     expect(result).toEqual(right(expectedPokemons))
@@ -53,7 +53,7 @@ describe('PokemonListService', () => {
     })
   })
 
-  // Tests that the getPaginated method returns a list of 40 Pokemon when called with no parameters
+  // Tests that the getPokemons method returns a list of 40 Pokemon when called with no parameters
   it('should return a list of 40 Pokemon when called with no parameters', async () => {
     // Arrange
     const expectedPokemons = [
@@ -68,16 +68,16 @@ describe('PokemonListService', () => {
     const pokemonListService = new PokemonListService()
 
     // Act
-    const result = await pokemonListService.getPaginated()
+    const result = await pokemonListService.getPokemons()
 
     // Assert
     expect(result).toEqual(right(expectedPokemons))
     expect(pokeapi.get).toHaveBeenCalledWith(endpoints.pokemons, {
-      params: { limit: 40, offset: 0 },
+      params: { limit: 100, offset: 0 },
     })
   })
 
-  // Tests that the getPaginated method returns a list of Pokemon with correct name and url properties
+  // Tests that the getPokemons method returns a list of Pokemon with correct name and url properties
   it('should return a list of Pokemon with correct name and url properties', async () => {
     // Arrange
     const expectedPokemons = [
@@ -92,16 +92,16 @@ describe('PokemonListService', () => {
     const pokemonListService = new PokemonListService()
 
     // Act
-    const result = await pokemonListService.getPaginated()
+    const result = await pokemonListService.getPokemons()
 
     // Assert
     expect(result).toEqual(right(expectedPokemons))
     expect(pokeapi.get).toHaveBeenCalledWith(endpoints.pokemons, {
-      params: { limit: 40, offset: 0 },
+      params: { limit: 100, offset: 0 },
     })
   })
 
-  // Tests that the getPaginated method returns an error when called with a negative limit parameter
+  // Tests that the getPokemons method returns an error when called with a negative limit parameter
   it('should return an error when called with a negative limit parameter', async () => {
     // Arrange
     const limit = -1
@@ -112,14 +112,14 @@ describe('PokemonListService', () => {
     const pokemonListService = new PokemonListService()
 
     // Act
-    const result = await pokemonListService.getPaginated(limit, offset)
+    const result = await pokemonListService.getPokemons(limit, offset)
 
     // Assert
     expect(result).toEqual(left(expectedError))
     expect(pokeapi.get).not.toHaveBeenCalled()
   })
 
-  // Tests that the getPaginated method returns an error when called with a negative offset parameter
+  // Tests that the getPokemons method returns an error when called with a negative offset parameter
   it('should return an error when called with a negative offset parameter', async () => {
     // Arrange
     const limit = 40
@@ -130,14 +130,14 @@ describe('PokemonListService', () => {
     const pokemonListService = new PokemonListService()
 
     // Act
-    const result = await pokemonListService.getPaginated(limit, offset)
+    const result = await pokemonListService.getPokemons(limit, offset)
 
     // Assert
     expect(result).toEqual(left(expectedError))
     expect(pokeapi.get).not.toHaveBeenCalled()
   })
 
-  // Tests that the getPaginated method returns an error when the API call fails
+  // Tests that the getPokemons method returns an error when the API call fails
   it('should return an error when the API call fails', async () => {
     // Arrange
     const limit = 40
@@ -150,7 +150,7 @@ describe('PokemonListService', () => {
     const pokemonListService = new PokemonListService()
 
     // Act
-    const result = await pokemonListService.getPaginated(limit, offset)
+    const result = await pokemonListService.getPokemons(limit, offset)
 
     // Assert
     expect(result).toEqual(left(expectedError))
