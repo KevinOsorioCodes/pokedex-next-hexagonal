@@ -1,10 +1,9 @@
-import { Either } from '~/shared/either'
 import { Pokemon } from '~/domain/entities'
 
 export interface IPokemonListUseCase {
-  getPaginatedPokemons: () => IPokemonListUseCase.output
+  getPokemonList: () => IPokemonListUseCase.output
 }
 
 export namespace IPokemonListUseCase {
-  export type output = Promise<Either<Error, Pokemon[]>>
+  export type output = Promise<Pokemon[]>
 }

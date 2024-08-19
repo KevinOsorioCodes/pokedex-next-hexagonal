@@ -1,18 +1,22 @@
 import { render } from '@testing-library/react'
 import { HomeView } from '~/infrastructure/react/ui/views/Home.view'
-import { Pokemon } from '~/domain/entities'
+
+import mockRouter from 'next-router-mock'
+import { labels } from '~/shared/labels'
+import { providerWrapper } from '~/tests/__mocks__/Wrappers'
+
+jest.mock('next/router', () => jest.requireActual('next-router-mock'))
 
 describe('HomeView Test Suite', () => {
   it('should render a list of pokemons', () => {
-    // Arrange
-    const pokemons = [
-      { name: 'pokemon1', url: 'url1' },
-      { name: 'pokemon2', url: 'url2' },
-    ]
-    const { findByTestId } = render(<HomeView pokemons={pokemons} />)
+    mockRouter.push('/')
+
+    const { findByTestId } = render(<HomeView />, {
+      wrapper: providerWrapper,
+    })
     const pokemonList = findByTestId('pokedex-list')
-    const pokemon1 = findByTestId(`pokemon-${pokemons[0].name}}`)
-    const pokemon2 = findByTestId(`pokemon-${pokemons[1].name}}`)
+    const pokemon1 = findByTestId(`pokemon-bulbasaur`)
+    const pokemon2 = findByTestId(`pokemon-charizard`)
     // Act & Assert
     expect(pokemonList).toBeDefined()
     expect(pokemon1).toBeDefined()
@@ -20,9 +24,8 @@ describe('HomeView Test Suite', () => {
   })
   it('should render an empty list', () => {
     // Arrange
-    const pokemons = [] as Pokemon[]
-    const { findByText } = render(<HomeView pokemons={pokemons} />)
-    const pokemonList = findByText('loading...')
+    const { getByText } = render(<HomeView />, { wrapper: providerWrapper })
+    const pokemonList = getByText(labels.home.subtitle)
     // Act & Assert
     expect(pokemonList).toBeDefined()
   })
