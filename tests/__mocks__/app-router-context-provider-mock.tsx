@@ -1,8 +1,8 @@
-import {
-  AppRouterContext,
-  AppRouterInstance,
-} from 'next/dist/shared/lib/app-router-context'
 import React, { useMemo } from 'react'
+import {
+  AppRouterInstance,
+  AppRouterContext,
+} from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
 export type AppRouterContextProviderMockProps = {
   router: Partial<AppRouterInstance>
