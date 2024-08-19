@@ -1,8 +1,15 @@
 import Image from 'next/image'
-import { pokemonColors, PokemonType, usePokemonColor } from '~/infrastructure/react/hooks/usePokemonColor'
+import {
+  pokemonColors,
+  PokemonType,
+  usePokemonColor,
+} from '~/infrastructure/react/hooks/usePokemonColor'
 import { FC } from 'react'
 import { PokemonStats } from '~/infrastructure/react/ui/components/PokemonCard/PokemonStats'
-import { usePokedexDispatch, usePokedexState } from '~/infrastructure/react/hooks/usePokedexContext'
+import {
+  usePokedexDispatch,
+  usePokedexState,
+} from '~/infrastructure/react/hooks/usePokedexContext'
 import { useQuery } from '@tanstack/react-query'
 import { PokemonCardSkeleton } from '~/infrastructure/react/ui/components/PokemonCard/PokemonCardSkeleton'
 import { getPokemon } from '~/infrastructure/services/pokemonQueries'
@@ -14,9 +21,9 @@ interface IPokemonCardProps {
 }
 
 export const PokemonCard: FC<IPokemonCardProps> = ({
-                                                     name,
-                                                     size = 'normal',
-                                                   }) => {
+  name,
+  size = 'normal',
+}) => {
   const { pokedex, pokemonTeam } = usePokedexState()
   const dispatch = usePokedexDispatch()
   const { data: pokemon, isLoading } = useQuery({
@@ -73,7 +80,7 @@ export const PokemonCard: FC<IPokemonCardProps> = ({
           </div>
           <div className={` flex ${color} w-full items-center justify-center`}>
             <Image
-              src={pokemon.sprites.front_default}
+              src={pokemon.sprites.front_default || ''}
               width={size === 'normal' ? 120 : 60}
               height={size === 'normal' ? 120 : 60}
               alt={`${pokemon.name}-image`}
@@ -104,25 +111,23 @@ export const PokemonCard: FC<IPokemonCardProps> = ({
             onClick={actuallyOnTeam ? handleRemovePokemon : handleAddPokemon}
           >
             <svg
-              className='w-5 h-5 mr-2'
-              fill='none'
-              stroke='currentColor'
-              strokeWidth='2'
-              viewBox='0 0 24 24'
-              ' xmlns="http'//www.w3.org/2000/sv'"
-              '         >
-           '
-            <path
-            '           strokeLinecap='r\'u\'d'
-            stro'eLinejoin''round'
-            '  d={
-            po'emonTeam.includes(pokemon)
-            ? 'M20 12H4' // "-' icon'                    : 'M12 4v16m'-8H4''// '+' icon
-            }
-            />
-          </svg>
-          {pokemonTeam.includes(pokemon) ? 'Remove' : 'Add to Team'}
-        </button>
+              className="w-5 h-5 mr-2"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d={
+                  pokemonTeam.includes(pokemon) ? 'M20 12H4' : 'M12 4v16m8-8H4'
+                }
+              />
+            </svg>
+            {pokemonTeam.includes(pokemon) ? 'Remove' : 'Add to Team'}
+          </button>
         </div>
       )}
     </div>
